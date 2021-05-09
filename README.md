@@ -1,2 +1,2 @@
-# COMP2200_05
-COMP2200_05_21
+# COMP2200StarterPack
+Starter Pack for COMP2200
