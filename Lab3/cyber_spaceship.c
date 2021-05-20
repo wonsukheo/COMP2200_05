@@ -22,8 +22,8 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
         return cab_start_location;
     }
     
-    for (i = 0; i < cab_length; i++) {
-        for(j = 0; j < cluster_count; j++) {
+    for (i = 0; i <= cab_length; i++) {
+        for (j = 0; j < cluster_count; j++) {
             if (cab_travel_ptr == cluster_start_locations[j]) {
                 overlapped_cluster_count++;
             }
@@ -31,17 +31,16 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
                 overlapped_cluster_count--;
             }
         }
-        
-        if ((overlapped_cluster_count & 1) == 0) {
-            current_safe_zone_length++;
-        } else {
+
+        if ((overlapped_cluster_count & 1) != 0 || i == cab_length) {
             if (current_safe_zone_length >= longest_safe_zone_length) {
                 longest_safe_zone_length = current_safe_zone_length;
                 longest_safe_zone_start_ptr = cab_travel_ptr - longest_safe_zone_length;
             }
             current_safe_zone_length = 0;
+        } else {
+            current_safe_zone_length++;
         }
-        
         cab_travel_ptr++;
     }
 
@@ -90,5 +89,5 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
     assert(safe_zone + not_safe_zone == cab_length);
 
     travel_time = (safe_zone * SAFE_ZONE_TRAVEL_SPEED_MIN_PER_BYTE + not_safe_zone * NOT_SAFE_ZONE_TRAVEL_SPEED_MIN_PER_BYTE);
-    return (int)((travel_time + 0.5) * 10) /  10;
+    return (int)((travel_time + 0.5) * 10) / 10;
 }
