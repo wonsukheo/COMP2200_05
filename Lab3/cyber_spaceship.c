@@ -61,14 +61,15 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
     size_t j;	
     
     if (cluster_count == 0) {
-        return (int)(SAFE_ZONE_TRAVEL_SPEED_MIN_PER_BYTE * cab_length);
+        travel_time = SAFE_ZONE_TRAVEL_SPEED_MIN_PER_BYTE * cab_length;
+        return (int)((travel_time + 0.5) * 10) / 10;
     }
     if (cab_length == 0) {
         return -1;
     }
 
     for (i = 0; i < cab_length; i++) {
-        for(j = 0; j < cluster_count; j++) {
+        for (j = 0; j < cluster_count; j++) {
             if (cab_travel_ptr == cluster_start_locations[j]) {
                 overlapped_cluster_count++;
             }
