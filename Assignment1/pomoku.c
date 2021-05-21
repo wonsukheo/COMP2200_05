@@ -1,10 +1,6 @@
 #include "pomoku.h"
 
-#define ARRAY_LENGTH(arr) sizeof(arr) / sizeof(arr[0])
-
 char play_board[20][20];
-color_t player_black = COLOR_BLACK;
-color_t player_white = COLOR_WHITE;
 size_t black_score;
 size_t white_score;
 size_t row_length;
@@ -23,7 +19,7 @@ void init_game(void)
     /* '0' invalid board, '1' valid board */
     for (i = 0; i < row_length; i++) {
         for (j = 0; j < col_length; j++) {
-            if (i > 14 || j > 14) {
+            if (i > 14 && j > 14) {
                 play_board[i][j] = '0';
             } else {
                 play_board[i][j] = '1';
