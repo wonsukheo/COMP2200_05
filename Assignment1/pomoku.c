@@ -152,7 +152,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
     /* update_score_top_left */
     {
         same_color_count = 1;
-        i = 0;
+        i = 1;
         while ((int)(row - i) >= 0 && (int)(col - i) >= 0) {
             if (s_play_board[row - i][col - i] == placed_color) {
                 same_color_count++;
@@ -161,7 +161,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
             }
             i++;
         }
-        i = 0;
+        i = 1;
         while ((row + i) < s_row_length && (col + i) < s_col_length) {
             if (s_play_board[row + i][col + i] == placed_color) {
                 same_color_count++;
@@ -177,8 +177,8 @@ void update_score(const color_t color, const size_t row, const size_t col)
     }
     /* update_score_top_right */ 
     {
-        same_color_count = 0;
-        i = 0;
+        same_color_count = 1;
+        i = 1;
         while ((int)(row - i) >= 0 && col + i < s_col_length) {
             if (s_play_board[row - i][col + i] == placed_color) {
                 same_color_count++;
