@@ -108,14 +108,14 @@ void update_score(const color_t color, const size_t row, const size_t col)
     {
         same_color_count = 1;
 
-        for (i = col - 1; i >= 0; i--) {
+        for (i = (int)col - 1; i >= 0; i--) {
             if (s_play_board[row][i] == placed_color) {
                 same_color_count++;
             } else { 
                 break;
             }
         }
-        for (i = col + 1; i < (int)s_col_length; i++) {
+        for (i = (int)col + 1; i < (int)s_col_length; i++) {
             if (s_play_board[row][i] == placed_color) {
                 same_color_count++;
             } else { 
@@ -130,14 +130,14 @@ void update_score(const color_t color, const size_t row, const size_t col)
     {
         same_color_count = 1;
 
-        for (i = row - 1; i >= 0; i--) {
+        for (i = (int)row - 1; i >= 0; i--) {
             if (s_play_board[i][col] == placed_color) {
                 same_color_count++;
             } else { 
                 break;
             }
         }
-        for (i = row + 1; i < (int)s_row_length; i++) {
+        for (i = (int)row + 1; i < (int)s_row_length; i++) {
             if (s_play_board[i][col] == placed_color) {
                 same_color_count++;
             } else { 
@@ -152,6 +152,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
     /* update_score_top_left */
     {
         same_color_count = 1;
+        i = 0;
         while ((int)(row - i) >= 0 && (int)(col - i) >= 0) {
             if (s_play_board[row - i][col - i] == placed_color) {
                 same_color_count++;
@@ -178,7 +179,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
     {
         same_color_count = 0;
         i = 0;
-        while (row - i >= 0 && col + i < s_col_length) {
+        while ((int)(row - i) >= 0 && col + i < s_col_length) {
             if (s_play_board[row - i][col + i] == placed_color) {
                 same_color_count++;
             } else {
@@ -187,7 +188,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
             i++;
         }
         i = 0;
-        while (row + i < s_row_length && col - i >= 0) {
+        while (row + i < s_row_length && (int)(col - i) >= 0) {
             if (s_play_board[row + i][col - i] == placed_color) {
                 same_color_count++;
             } else {
@@ -205,7 +206,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
 /*special moves */
 int insert_row(const color_t color, const size_t row)
 {
-    size_t i;
+    int i;
     size_t j;
     
     if (s_row_length >= 20 || row > s_row_length) {
@@ -225,10 +226,10 @@ int insert_row(const color_t color, const size_t row)
             s_white_score -= 3;
         }
     }
-    for (i = s_row_length; i >= row; i--) {
+    for (i = (int)s_row_length; i >= (int)row; i--) {
         for (j = 0; j < s_col_length; j++) {
             if (i == row) {
-                s_play_board[i][j] = 0;
+                s_play_board[i][j] = '1';
             } else {
                 s_play_board[i][j] = s_play_board[i - 1][j];
             }
@@ -242,7 +243,7 @@ int insert_row(const color_t color, const size_t row)
 int insert_column(const color_t color, const size_t col)
 {
     size_t i;
-    size_t j;
+    int j;
     
     if (s_col_length >= 20 || col > s_col_length) {
         return FALSE;
@@ -262,9 +263,9 @@ int insert_column(const color_t color, const size_t col)
         }
     }
     for (i = 0; i < s_row_length; i++) {
-        for (j = s_col_length; j >= col; j--) {
+        for (j = (int)s_col_length; j >= (int)col; j--) {
             if (j == col) {
-                s_play_board[i][j] = 0;
+                s_play_board[i][j] = '1';
             } else {
                 s_play_board[i][j] = s_play_board[i][j - 1];
             }
@@ -300,7 +301,7 @@ int remove_row(const color_t color, const size_t row)
     for (i = row; i < s_row_length; i++) {
         for (j = 0; j < s_col_length; j++) {
             if (i == s_row_length - 1) {
-                s_play_board[i][j] = 0;
+                s_play_board[i][j] = '0';
             } else {
                 s_play_board[i][j] = s_play_board[i + 1][j];
             }
@@ -336,7 +337,7 @@ int remove_column(const color_t color, const size_t col)
     for (i = 0; i < s_row_length; i++) {
         for (j = col; j < s_col_length; j++) {
             if (j == s_col_length - 1) {
-                s_play_board[i][j] = 0;
+                s_play_board[i][j] = '0';
             } else {
                 s_play_board[i][j] = s_play_board[i][j + 1];
             }
