@@ -1,6 +1,6 @@
 #include "pomoku.h"
 
-char play_board[20][20];
+char play_board[20][20];   
 size_t black_score;
 size_t white_score;
 size_t row_length;
@@ -151,7 +151,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
     /* update_score_top_left */
     {
         same_color_count = 1;
-        while ((int)(row - i) >= 0 || (int)(col - i) >= 0) {
+        while ((int)(row - i) >= 0 && (int)(col - i) >= 0) {
             if (play_board[row - i][col - i] == placed_color) {
                 same_color_count++;
             } else {
@@ -167,7 +167,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
     /* update_score_top_right */ 
     {
         same_color_count = 0;
-        while (row + i <= row_length || col + i <= col_length) {
+        while (row + i <= row_length && col + i <= col_length) {
             if (play_board[row + i][col + i] == placed_color) {
                 same_color_count++;
             } else {
@@ -188,7 +188,7 @@ int insert_row(const color_t color, const size_t row)
     size_t i;
     size_t j;
     
-    if (row_length + 1 > 20) {
+    if (row_length >= 20 || row > row_length) {
         return FALSE;
     }
 
@@ -224,7 +224,7 @@ int insert_column(const color_t color, const size_t col)
     size_t i;
     size_t j;
     
-    if (col_length + 1 > 20) {
+    if (col_length >= 20 || col > col_length) {
         return FALSE;
     }
 
@@ -260,7 +260,7 @@ int remove_row(const color_t color, const size_t row)
     size_t i;
     size_t j;
     
-    if (row_length - 1 < 10) {
+    if (row_length <= 10 || row >= row_length) {
         return FALSE;
     }
 
@@ -296,7 +296,7 @@ int remove_column(const color_t color, const size_t col)
     size_t i;
     size_t j;
     
-    if (col_length - 1 < 10) {
+    if (col_length <= 10 || col >= col_length) {
         return FALSE;
     }
 
@@ -332,6 +332,10 @@ int swap_rows(const color_t color, const size_t row0, const size_t row1)
     size_t j;
     char temp_char;
 
+    if (row0 >= row_length || row1 >= row_length) {
+        return FALSE;
+    }
+
     if (color == COLOR_BLACK) {
         if (black_score < 2) {
             return FALSE;
@@ -359,6 +363,10 @@ int swap_columns(const color_t color, const size_t col0, const size_t col1)
 {
     size_t i;
     char temp_char;
+    
+    if (col0 >= col_length || col1 >= col_length) {
+        return FALSE;
+    }
 
     if (color == COLOR_BLACK) {
         if (black_score < 2) {
@@ -387,6 +395,10 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
 {
     size_t j;
 
+    if (src >= row_length || dst >= row_length) {
+        return FALSE;
+    }
+
     if (color == COLOR_BLACK) {
         if (black_score < 4) {
             return FALSE;
@@ -411,6 +423,10 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
 int copy_column(const color_t color, const size_t src, const size_t dst)
 {
     size_t i;
+
+    if (src >= col_length || dst >= col_length) {
+        return FALSE;
+    }
 
     if (color == COLOR_BLACK) {
         if (black_score < 4) {
