@@ -162,7 +162,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
             i++;
         }
         i = 1;
-        while ((row + i) < s_row_length && (col + i) < s_col_length) {
+        while ((row + i) < s_row_length && col + i < s_col_length) {
             if (s_play_board[row + i][col + i] == placed_color) {
                 same_color_count++;
             } else {
@@ -187,7 +187,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
             }
             i++;
         }
-        i = 0;
+        i = 1;
         while (row + i < s_row_length && (int)(col - i) >= 0) {
             if (s_play_board[row + i][col - i] == placed_color) {
                 same_color_count++;
