@@ -1,8 +1,7 @@
 #include "pomoku.h"
 
 const size_t START_LENGTH = 15;
-const size_t MAX_LENGTH = 20;
-static char s_play_board[MAX_LENGTH][MAX_LENGTH];   
+static char s_play_board[20][20];   
 static size_t s_black_score;
 static size_t s_white_score;
 static size_t s_row_length;
