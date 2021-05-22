@@ -1,11 +1,12 @@
 #include "pomoku.h"
 
-static char s_play_board[20][20];   
+const size_t START_LENGTH = 15;
+const size_t MAX_LENGTH = 20;
+static char s_play_board[MAX_LENGTH][MAX_LENGTH];   
 static size_t s_black_score;
 static size_t s_white_score;
 static size_t s_row_length;
 static size_t s_col_length;
-const size_t START_LENGTH = 15;
 
 void init_game(void)
 {
@@ -100,7 +101,7 @@ int place_stone(const color_t color, const size_t row, const size_t col)
 
 void update_score(const color_t color, const size_t row, const size_t col)
 {
-    int i = 0;
+    int i;
     size_t same_color_count;
     char placed_color = color == COLOR_BLACK ? 'B' : 'W';
 
@@ -153,6 +154,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
     {
         same_color_count = 1;
         i = 1;
+
         while ((int)(row - i) >= 0 && (int)(col - i) >= 0) {
             if (s_play_board[row - i][col - i] == placed_color) {
                 same_color_count++;
@@ -161,8 +163,9 @@ void update_score(const color_t color, const size_t row, const size_t col)
             }
             i++;
         }
+
         i = 1;
-        while ((row + i) < s_row_length && col + i < s_col_length) {
+        while (row + i < s_row_length && col + i < s_col_length) {
             if (s_play_board[row + i][col + i] == placed_color) {
                 same_color_count++;
             } else {
@@ -179,6 +182,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
     {
         same_color_count = 1;
         i = 1;
+
         while ((int)(row - i) >= 0 && col + i < s_col_length) {
             if (s_play_board[row - i][col + i] == placed_color) {
                 same_color_count++;
@@ -187,6 +191,7 @@ void update_score(const color_t color, const size_t row, const size_t col)
             }
             i++;
         }
+
         i = 1;
         while (row + i < s_row_length && (int)(col - i) >= 0) {
             if (s_play_board[row + i][col - i] == placed_color) {
@@ -226,9 +231,10 @@ int insert_row(const color_t color, const size_t row)
             s_white_score -= 3;
         }
     }
+
     for (i = (int)s_row_length; i >= (int)row; i--) {
         for (j = 0; j < s_col_length; j++) {
-            if (i == row) {
+            if (i == (int)row) {
                 s_play_board[i][j] = '1';
             } else {
                 s_play_board[i][j] = s_play_board[i - 1][j];
@@ -262,9 +268,10 @@ int insert_column(const color_t color, const size_t col)
             s_white_score -= 3;
         }
     }
+
     for (i = 0; i < s_row_length; i++) {
         for (j = (int)s_col_length; j >= (int)col; j--) {
-            if (j == col) {
+            if (j == (int)col) {
                 s_play_board[i][j] = '1';
             } else {
                 s_play_board[i][j] = s_play_board[i][j - 1];
@@ -298,6 +305,7 @@ int remove_row(const color_t color, const size_t row)
             s_white_score -= 3;
         }
     }
+
     for (i = row; i < s_row_length; i++) {
         for (j = 0; j < s_col_length; j++) {
             if (i == s_row_length - 1) {
@@ -334,6 +342,7 @@ int remove_column(const color_t color, const size_t col)
             s_white_score -= 3;
         }
     }
+
     for (i = 0; i < s_row_length; i++) {
         for (j = col; j < s_col_length; j++) {
             if (j == s_col_length - 1) {
