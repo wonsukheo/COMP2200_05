@@ -37,9 +37,13 @@ int index_of(const char* str, const char* word)
     size_t word_len = get_str_len(word);
     size_t count = 0;
 
+    if (str == NULL || word == NULL) {
+        return -1;
+    }
     if (word_len == 0) {
         return 0;
     }
+
     while (*str_ptr != '\0') {
         if (*str_ptr == *word_ptr) {
             count++;
@@ -79,8 +83,8 @@ void reverse_by_words(char* str)
         } else {
             str_ptr++;
         }
-   }
-   reverse(word_ptr);
+    }
+    reverse(word_ptr);
 }
 
 char* tokenize(char* str_or_null, const char* delims)
