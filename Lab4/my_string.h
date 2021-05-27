@@ -1,6 +1,6 @@
 #ifndef MY_STRING_H
 #define MY_STRING_H
-#include <stdlib.h>
+
 size_t get_str_len(const char* str);
 
 void reverse(char* str);
