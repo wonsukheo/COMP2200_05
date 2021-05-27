@@ -1,7 +1,7 @@
 #ifndef MY_STRING_H
 #define MY_STRING_H
 
-size_t get_str_len(const char* str);
+size_t get_str_len(const char* str_or_null);
 
 void reverse(char* str);
 

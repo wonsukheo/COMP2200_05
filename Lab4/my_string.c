@@ -4,13 +4,16 @@
 
 static char* s_original_str = NULL;
 
-size_t get_str_len(const char* str)
+size_t get_str_len(const char* str_or_null)
 {
-    const char* ptr = str;
+    const char* ptr = str_or_null;
+    if (str_or_null == NULL) {
+        return 0;
+    }
     while (*ptr++ != '\0') {
     }
     
-    return ptr - str - 1;
+    return ptr - str_or_null - 1;
 }
 
 void reverse(char* str)
@@ -33,9 +36,9 @@ void reverse(char* str)
 int index_of(const char* str, const char* word)
 {
     const char* str_ptr = str;
+    const char* str_ptr_2 = NULL;
     const char* word_ptr = word;
-    size_t word_len = get_str_len(word);
-    size_t count = 0;
+    size_t word_len = get_str_len(word_ptr);
 
     if (str == NULL || word == NULL) {
         return -1;
@@ -43,28 +46,23 @@ int index_of(const char* str, const char* word)
     if (word_len == 0) {
         return 0;
     }
-
     while (*str_ptr != '\0') {
-        if (*str_ptr == *word_ptr) {
-            count++;
+        if (*str_ptr++ == *word_ptr) {
             word_ptr++;
-            str_ptr++;
-        } else { 
-            count = 0;
-            word_ptr = word;
+            str_ptr_2 = str_ptr;
 
-            if (*str_ptr++ == *word_ptr) {
-                count++;
-                word_ptr++;
+            while (*word_ptr != '\0') {
+                if (*str_ptr_2++ != *word_ptr++) {
+                    word_ptr = word;
+                    break;
+                }                 
+            }
+            if (*word_ptr == '\0') {
+                return str_ptr - 1 - str;
             }
         }
-        
-        if (count == word_len) {
-            return str_ptr - word_len - str;   
-        }
-    }
-    
-    return -1;     
+    }    
+    return -1;   
 }
 
 void reverse_by_words(char* str)
