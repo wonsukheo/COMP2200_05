@@ -1,5 +1,7 @@
 #include "my_string.h"
 
+#define NULL ((void*)0)
+
 static char* s_original_str = NULL;
 
 size_t get_str_len(const char* str)
