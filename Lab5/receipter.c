@@ -43,8 +43,13 @@ void print_header(time_t timestamp)
     char timestamp_string[RECEIPT_WIDTH + 1]; 
     const char RESTAURANT_NAME[] = "Charles' Seafood";
 
-    int year, month, day, hours, minutes, seconds;
-    struct tm *gm = gmtime(&timestamp);
+    int year;
+    int month;
+    int day;
+    int hours;
+    int minutes;
+    int seconds;
+    struct tm* gm = gmtime(&timestamp);
     year = gm->tm_year + 1900;
     month = gm->tm_mon + 1;
     day = gm->tm_mday;
@@ -76,7 +81,7 @@ int add_item(const char* name, double price)
         return FALSE;
     }
 
-    sprintf(s_item_buffer_ptr, "%32.25s %17.2f\n", name, price);    
+    sprintf(s_item_buffer_ptr, "%33.25s %16.2f\n", name, price);    
     s_item_buffer_ptr += RECEIPT_WIDTH + 1;
     s_order_subtotal += price;
 
@@ -99,17 +104,17 @@ int print_price(void)
 
     sprintf(s_pricing_buffer_ptr, "\n");
     s_pricing_buffer_ptr++;
-    sprintf(s_pricing_buffer_ptr, "%32.25s %17.2f\n", "Subtotal", s_order_subtotal);
+    sprintf(s_pricing_buffer_ptr, "%33.25s %16.2f\n", "Subtotal", s_order_subtotal);
     s_pricing_buffer_ptr += RECEIPT_WIDTH + 1;
 
     if (s_order_tip != 0.00f) {
-        sprintf(s_pricing_buffer_ptr, "%32.25s %17.2f\n", "Tip", s_order_tip);
+        sprintf(s_pricing_buffer_ptr, "%33.25s %16.2f\n", "Tip", s_order_tip);
         s_pricing_buffer_ptr += RECEIPT_WIDTH + 1;
     }
 
-    sprintf(s_pricing_buffer_ptr, "%32.25s %17.2f\n", "Tax", order_tax);
+    sprintf(s_pricing_buffer_ptr, "%33.25s %16.2f\n", "Tax", order_tax);
     s_pricing_buffer_ptr += RECEIPT_WIDTH + 1;
-    sprintf(s_pricing_buffer_ptr, "%32.25s %17.2f\n", "Total", s_order_subtotal + s_order_tip + order_tax);
+    sprintf(s_pricing_buffer_ptr, "%33.25s %16.2f\n", "Total", s_order_subtotal + s_order_tip + order_tax);
     s_pricing_buffer_ptr += RECEIPT_WIDTH + 1;
     sprintf(s_pricing_buffer_ptr, "\n");
     s_pricing_buffer_ptr++;
