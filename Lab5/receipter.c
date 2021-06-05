@@ -149,7 +149,7 @@ void print_ending(void)
     s_ending_buffer_ptr += RECEIPT_WIDTH + 1;
     
     sprintf(s_ending_buffer_ptr, "%50s", "Tax#-51234");
-    s_ending_buffer_ptr += RECEIPT_WIDTH + 1;
+    s_ending_buffer_ptr += RECEIPT_WIDTH;
     *s_ending_buffer_ptr = '\0';
 }
 
