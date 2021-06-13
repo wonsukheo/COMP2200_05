@@ -61,6 +61,7 @@ void deserialize_v1_to_v3(char* character_info, character_v3_t* out_character)
         if (strcmp(*char_info_token_ptr, "id") == 0) {
             sscanf("player_", "%s", &(out_character->name));
             sscanf(*(char_info_token_ptr + 1), "%s", &(out_character->name[7]));
+            out_character->name[50] = '\0';
         } else if (strcmp(*char_info_token_ptr, "lvl") == 0) {
             sscanf(*(char_info_token_ptr + 1), "%d", &(out_character->level));
         } else if (strcmp(*char_info_token_ptr, "str") == 0) {
@@ -102,6 +103,7 @@ void deserialize_v2_to_v3(char* character_info, character_v3_t* out_character)
     while (*char_info_token_ptr != NULL) {
         if (strcmp(*char_info_token_ptr, "name") == 0) {
             sscanf(*(char_info_token_ptr + 10), "%s", &(out_character->name));
+            out_character->name[50] = '\0';
         } else if (strcmp(*char_info_token_ptr, "level") == 0) {
             sscanf(*(char_info_token_ptr + 10), "%d", &(out_character->level));
         } else if (strcmp(*char_info_token_ptr, "strength") == 0) {
@@ -149,6 +151,7 @@ void deserialize_v3_to_v3(char* character_info, character_v3_t* out_character)
     while (*char_info_token_ptr != NULL) {
         if (strcmp(*char_info_token_ptr, "name") == 0) {
             sscanf(*(char_info_token_ptr + 14), "%s", &(out_character->name));
+            out_character->name[50] = '\0';
         } else if (strcmp(*char_info_token_ptr, "level") == 0) {
             sscanf(*(char_info_token_ptr + 14), "%d", &(out_character->level));
         } else if (strcmp(*char_info_token_ptr, "strength") == 0) {

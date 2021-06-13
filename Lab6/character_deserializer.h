@@ -1,7 +1,7 @@
 #ifndef CHARACTER_DESERIALIZER_H
 #define CHARACTER_DESERIALIZER_H
 
-enum { NAME_LEN = 50 };
+enum { NAME_LEN = 51 };
     
 typedef struct {
     char name[NAME_LEN]; /* 배열로? 포인터로? */
@@ -37,4 +37,9 @@ int get_character(const char* filename, character_v3_t* out_character);
 void deserialize_v1_to_v3(char* character_info, character_v3_t* out_character);
 
 void deserialize_v2_to_v3(char* character_info, character_v3_t* out_character);
+
+void deserialize_v3_to_v3(char* character_info, character_v3_t* out_character);
+
+void remove_whitespace(char* string);
+
 #endif /* CHARACTER_DESERIALIZER_H */
