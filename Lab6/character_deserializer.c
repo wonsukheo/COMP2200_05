@@ -14,7 +14,7 @@ int get_character(const char* filename, character_v3_t* out_character)
 {
     char character_info_str[CHARACTER_INFO_LEN];
     char* character_info_str_ptr = character_info_str;
-    size_t version;
+    size_t version = 0;
     size_t i = 0;
 
     FILE* stream = fopen(filename, "r"); /* error check */
@@ -41,6 +41,7 @@ int get_character(const char* filename, character_v3_t* out_character)
         }
         character_info_str_ptr++;
     } 
+
     return version;
 }
 
@@ -52,7 +53,7 @@ void deserialize_v1_to_v3(char* character_info, character_v3_t* out_character)
     *char_info_token_ptr = strtok(character_info, delims);
     
     while (*char_info_token_ptr != NULL) {
-       *++char_info_token_ptr = strtok(NULL, delims);
+        *++char_info_token_ptr = strtok(NULL, delims);
     }
     
     char_info_token_ptr = char_info_token;
@@ -95,15 +96,15 @@ void deserialize_v2_to_v3(char* character_info, character_v3_t* out_character)
     *char_info_token_ptr = strtok(character_info, delims);
     
     while (*char_info_token_ptr != NULL) {
-       *++char_info_token_ptr = strtok(NULL, delims);
+        *++char_info_token_ptr = strtok(NULL, delims);
     }
     
     char_info_token_ptr = char_info_token;
 
     while (*char_info_token_ptr != NULL) {
         if (strcmp(*char_info_token_ptr, "name") == 0) {
-            sscanf(*(char_info_token_ptr + 10), "%s", &(out_character->name));
-            out_character->name[50] = '\0';
+            strncpy(out_character->name, *(char_info_token_ptr + 10), 50);
+            out_character->name[50] = '\0';            
         } else if (strcmp(*char_info_token_ptr, "level") == 0) {
             sscanf(*(char_info_token_ptr + 10), "%d", &(out_character->level));
         } else if (strcmp(*char_info_token_ptr, "strength") == 0) {
@@ -143,15 +144,15 @@ void deserialize_v3_to_v3(char* character_info, character_v3_t* out_character)
     *char_info_token_ptr = strtok(character_info, delims);
     
     while (*char_info_token_ptr != NULL) {
-       *++char_info_token_ptr = strtok(NULL, delims);
+        *++char_info_token_ptr = strtok(NULL, delims);
     }
     
     char_info_token_ptr = char_info_token;
      
     while (*char_info_token_ptr != NULL) {
         if (strcmp(*char_info_token_ptr, "name") == 0) {
-            sscanf(*(char_info_token_ptr + 14), "%s", &(out_character->name));
-            out_character->name[50] = '\0';
+            strncpy(out_character->name, *(char_info_token_ptr + 14), 50);
+            out_character->name[50] = '\0';            
         } else if (strcmp(*char_info_token_ptr, "level") == 0) {
             sscanf(*(char_info_token_ptr + 14), "%d", &(out_character->level));
         } else if (strcmp(*char_info_token_ptr, "strength") == 0) {
@@ -168,8 +169,7 @@ void deserialize_v3_to_v3(char* character_info, character_v3_t* out_character)
             sscanf(*(char_info_token_ptr + 14), "%d", &(out_character->mana));
         } else if (strcmp(*char_info_token_ptr, "evasion") == 0) {
             sscanf(*(char_info_token_ptr + 14), "%d", &(out_character->evasion));
-        }
-        else if (strcmp(*char_info_token_ptr, "fire_res") == 0) {
+        } else if (strcmp(*char_info_token_ptr, "fire_res") == 0) {
             sscanf(*(char_info_token_ptr + 14), "%d", &(out_character->elemental_resistance.fire));
         } else if (strcmp(*char_info_token_ptr, "cold_res") == 0) {
             sscanf(*(char_info_token_ptr + 14), "%d", &(out_character->elemental_resistance.cold));

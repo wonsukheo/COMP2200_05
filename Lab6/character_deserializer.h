@@ -22,7 +22,7 @@ typedef struct {
     unsigned int health;
     unsigned int mana;
     unsigned int strength;
-    unsigned int dexterity;    /* diff btw unsigned int & size_t? */
+    unsigned int dexterity;
     unsigned int intelligence;
     unsigned int armour;
     unsigned int evasion;
