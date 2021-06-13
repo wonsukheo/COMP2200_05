@@ -60,8 +60,8 @@ void deserialize_v1_to_v3(char* character_info, character_v3_t* out_character)
 
     while (*char_info_token_ptr != NULL) {
         if (strcmp(*char_info_token_ptr, "id") == 0) {
-            sscanf("player_", "%s", &(out_character->name));
-             strncpy(out_character->name[7], *(char_info_token_ptr + 1), 50);
+            strncpy(out_character->name, "player_", 7);
+            strncpy(&(out_character->name[7]), *(char_info_token_ptr + 1), 43);
             out_character->name[50] = '\0';
         } else if (strcmp(*char_info_token_ptr, "lvl") == 0) {
             sscanf(*(char_info_token_ptr + 1), "%d", &(out_character->level));
