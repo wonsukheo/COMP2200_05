@@ -104,10 +104,12 @@ int translate(int argc, const char** argv)
                 return -1;
             } else if (difference == 0) {
                 strcpy(set1_ptr - 1, set1_ptr + 1);
-            } else {
-                strcpy(set1_ptr + difference - 2, set1_ptr + 1);
+            } else if (difference == 1) {
+                strcpy(set1_ptr, set1_ptr + 1);
+            } else if (difference > 1) {
+                strcpy(set1_ptr + difference - 1, set1_ptr + 1);
                 for (i = 0; i < difference - 1; i++) {
-                    set1_ptr[i] = *set1_ptr - 1;
+                    set1_ptr[i] = *(set1_ptr - 1) + 1;
                 }
             }                     
         }
@@ -119,7 +121,9 @@ int translate(int argc, const char** argv)
     while (c != EOF) {
         size_t index;
         if (flag == TRUE) {
-            c |= ' ';
+            if ((c > 64 && c < 91) || (c  > 96 && c < 123)) {
+                c |= ' ';
+            }
         }
         if (strrchr(set1, c) != NULL) {
             index = strrchr(set1, c) - set1;
