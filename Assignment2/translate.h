@@ -14,6 +14,4 @@ typedef enum error_code {
 
 int translate(int argc, const char** argv);
 
-int do_magic(int argc, char* set1, char* set2, const char** argv, int flag);
-
 #endif /* TRANSLATE_H */

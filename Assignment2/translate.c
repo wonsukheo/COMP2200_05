@@ -3,240 +3,130 @@
 
 #include "translate.h"
 
-#define LENGTH (512)
+enum { BUFFER_LEN = 512
+};
 
-int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
-{   
-    char escape_char_cmd[10] = { '\\', 'a', 'b', 'f', 'n', 'r', 't', 'v', '\'', '\"' };
-    char escape_char_c[10] = { '\\', '\a', '\b', '\f', '\n', '\r', '\t', '\v', '\'', '\"' };
-    size_t set1_length;
-    size_t set2_length;
-    size_t i;
-    size_t j;
-
-    /* error code return */
-    if (flag == 0) {
-        if (argc != 3) {
-            fprintf(stdout, "%s", "ERROR_CODE_WRONG_ARGUMENTS_NUMBER"); 
-            return 1;
-        }
-        if (strlen(argv[1]) > LENGTH || strlen(argv[2]) > LENGTH) {
-            fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
-            return 4;
-        }
-
-        strncpy(set1, argv[1], LENGTH);
-        set1[LENGTH] = '\0';
-        strncpy(set2, argv[2], LENGTH);
-        set2[LENGTH] = '\0';
-    } else if (flag == 1) {
-        if (argc != 4) {
-            fprintf(stdout, "%s", "ERROR_CODE_WRONG_ARGUMENTS_NUMBER"); 
-            return 1;
-        }
-        if (strlen(argv[2]) > LENGTH || strlen(argv[3]) > LENGTH) {
-            fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
-            return 4;
-        }
-
-        strncpy(set1, argv[2], LENGTH);
-        set1[LENGTH] = '\0';
-        strncpy(set2, argv[3], LENGTH);
-        set2[LENGTH] = '\0';
-    }    
-    set1_length = strlen(set1);
-    set2_length = strlen(set2);
-
-    /* check escape char */
-    for (i = 0; i < set1_length; ++i) {
-        if (set1[i] == '\\') {
-            for (j = 0; j < 10; ++j) {
-                if (set1[i + 1] == escape_char_cmd[j]) {
-                    set1[i] = escape_char_c[j];
-                        
-                    strcpy(&set1[i + 1], &set1[i + 2]);
-                    break;
-                } 
-            }   
-            if (j == 10) {
-                fprintf(stdout, "%s", "ERROR_CODE_INVALID_FORMAT");
-                return 3;    
-            }
-        }
-    }
-    for (i = 0; i < set2_length; ++i) {
-        if (set2[i] == '\\') {
-            for (j = 0; j < 10; ++j) {
-                if (set2[i + 1] == escape_char_cmd[j]) {
-                    set2[i] = escape_char_c[j];
-                    strcpy(&set2[i + 1], &set2[i + 2]);
-                    break;
-                }
-            }    
-         
-            if (j == 10) {
-                fprintf(stdout, "%s", "ERROR_CODE_INVALID_FORMAT");
-                return 3;    
-            }
-        }
-    }  
-    /* char - char */
-    for (i = 1; i < set1_length - 1; ++i) {
-        if (set1[i] == '-') {
-            if (set1[i - 1] != set1[i + 1]) {
-                int difference_ascii = (int)set1[i + 1] - (int)set1[i - 1];	
-                char temp_array[511];          
-                strcpy(temp_array, &set1[i + 2]);            
-                
-                if (difference_ascii < 0) {
-                    fprintf(stdout, "%s", "ERROR_CODE_INVALID_RANGE");
-                    return 5;
-                }
-                if (set1_length + difference_ascii - 2 > 511) {
-                    fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
-                    return 4;
-                }
-                for (j = i; j < difference_ascii + i; ++j) {
-                    set1[j] = (char)((int)set1[j - 1] + 1);
-                }
-                
-                strcpy(&set1[i + difference_ascii], temp_array);
-                i += difference_ascii;
-                set1_length = strlen(set1);
-            }
-            if (set1[i + 1] == '-' && set1[i + 2] == '-') {
-                strcpy(&set1[i], &set1[i + 2]);
-                set1[set1_length - 1] = '\0';
-                set1[set1_length - 2] = '\0';
-            }
-            if (set1[i - 1] == set1[i + 1]) {
-                strcpy(&set1[i - 1], &set1[i + 1]);
-                set1[set1_length - 1] = '\0';
-                set1[set1_length - 2] = '\0';            
-            }
-        }    
-    }    
-    for (i = 1; i < set2_length - 1; ++i) {
-        if (set2[i] == '-') {
-            if (set2[i - 1] != set2[i + 1]) {
-                int difference_ascii = (int)set2[i + 1] - (int)set2[i - 1];	
-                char temp_array[511];
-           
-                strcpy(temp_array, &set2[i + 2]);
-            
-                if (difference_ascii < 0) {
-                    fprintf(stdout, "%s", "ERROR_CODE_INVALID_RANGE");
-                    return 5;
-                }
-                if (set1_length + difference_ascii - 2 > 511) {
-                    fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
-                    return 4;
-                }
-                for (j = i; j < difference_ascii + i; ++j) {
-                    set2[j] = (char)((int)set2[j - 1] + 1);
-                }
-                strcpy(&set2[i + difference_ascii], temp_array);
-                i += difference_ascii;
-                set2_length = strlen(set1);
-            }
-            if (set2[i + 1] == '-' && set2[i + 2] == '-') {
-                strcpy(&set2[i], &set2[i + 2]);
-                set2[set2_length - 1] = '\0';
-                set2[set2_length - 2] = '\0';
-            }
-            if (set2[i - 1] == set2[i + 1]) {
-                strcpy(&set2[i - 1], &set2[i + 1]);
-                set2[set2_length - 1] = '\0';
-                set2[set2_length - 2] = '\0';            
-            }           
-        }
-    }
-    
-    /* extend set2_len */
-    set1_length = strlen(set1);
-    set2_length = strlen(set2);
-    if (set1_length > set2_length) {
-        size_t i;
-        for (i = set2_length; i < set1_length; ++i) {
-            set2[i] = set2[i - 1];
-        }
-        set2[set1_length] = '\0';
-    }        
-
-    return 0;  
-}
-
-int translate(int argc, const char** argv) 
+int translate(int argc, const char** argv)
 {
-    char set1[LENGTH];
-    char set2[LENGTH];
-    char* set1_ptr = set1;
-    int c;
-    int count = 0;
-    int flag = 0;
-    int errormessage;
-    if (argc == 4) {
-        if (argv[1][0] == '-') {
-            if (argv[1][1] == 'i') {
-                flag = 1;
-            } else if (argv[1][1] != 'i') {
-                fprintf(stdout, "%s", "ERROR_CODE_INVALID_FLAG");
-                return 2;
-            }
-        }
-    } 
-    switch (flag) {
-    case 0: { 
-        errormessage = do_magic(argc, set1, set2, argv, flag);
-        if (errormessage != 0) {
-            return errormessage;
-        }
-        /* translate code */
- 
-        while (TRUE) {
-            c = getchar();
-            if (c == EOF) {
-                break;
-            }
-            set1_ptr = strrchr(set1, c);
-            if (set1_ptr != NULL) {
-                c = set2[set1_ptr - set1];
-            }
-            count++;
-            putchar(c);
-        }
-        return errormessage;
-    } break;
+    char set1[BUFFER_LEN];
+    char set2[BUFFER_LEN];
+    char* set1_ptr;
+    char* set2_ptr;
+    size_t set1_len;
+    size_t set2_len;
+    char c;
+    char ESCAPE_CHAR_CMD[11] = { '\\', 'a', 'b', 'f', 'n', 'r', 't', 'v', '\'', '\"' };
+    char ESCAPE_CHAR_C[11] = { '\\', '\a', '\b', '\f', '\n', '\r', '\t', '\v', '\'', '\"' };
 
-    case 1: {
-        errormessage = do_magic(argc, set1, set2, argv, flag);
-        if (errormessage != 0) {
-            return errormessage;
-        }
-        /* translate code */
-        while (*set1_ptr != '\0') {
-            *set1_ptr |= 32;
-            set1_ptr++;
-        }
-        while (TRUE) {
-            c = getchar();
-            if (c == EOF) {
-                break;
-            }
-            c |= 32;
-            set1_ptr = strrchr(set1, c);
-            if (set1_ptr != NULL) {
-                c = set2[set1_ptr - set1];
-            }
-            count++;
-            putchar(c);
-        }       
-        return errormessage;
-    } break;
-    
-    default: 
-        break;
+    int flag = FALSE;
+    ESCAPE_CHAR_CMD[10] = '\0';
+    ESCAPE_CHAR_C[10] = '\0';
+ 
+
+    if (argc == 3) {
+        if (strlen(argv[1]) > 511 || strlen(argv[2]) > 511) {
+            return -1;/*ERROR_CODE_ARGUMENT_TOO_LONG;*/
+        } 
+        strncpy(set1, argv[1], BUFFER_LEN);
+        set1[511] = '\0';
+        strncpy(set2, argv[2], BUFFER_LEN);
+        set2[511] = '\0';
+    } else if (argc == 4) {
+        if (strlen(argv[2]) > 511 || strlen(argv[3]) > 511) {
+            return -1;/*ERROR_CODE_ARGUMENT_TOO_LONG;*/
+        } 
+        strncpy(set1, argv[2], BUFFER_LEN);
+        set1[511] = '\0';
+        strncpy(set2, argv[3], BUFFER_LEN);
+        set2[511] = '\0';
+        flag = TRUE;
     }
 
-    return 0;
+    set1_len = strlen(set1);
+    set2_len = strlen(set2);
+     
+    if (set1_len > set2_len) {
+        size_t i;
+        size_t len_diff = set1_len - set2_len;
+        char last_c;
+
+        set2_ptr = set2 + set2_len;
+        last_c = *(set2_ptr - 1);
+        
+        for (i = 0; i < len_diff; i++) {
+            *set2_ptr++ = last_c;
+        }
+        *set2_ptr = '\0';
+    }
+    
+    set1_ptr = set1;
+
+    while (*set1_ptr != '\0') {
+        if (*set1_ptr == '\\') {
+            char ch = *(set1_ptr + 1);
+            char* escape_char_cmd_ptr = ESCAPE_CHAR_CMD;
+
+            while (*escape_char_cmd_ptr != '\0') {
+                if (*escape_char_cmd_ptr == ch) {
+                    *set1_ptr = *(ESCAPE_CHAR_C + (escape_char_cmd_ptr - ESCAPE_CHAR_CMD));
+                    strcpy(set1_ptr + 1, set1_ptr + 2);
+                    goto success;
+                }
+                escape_char_cmd_ptr++;
+            }
+            return -1;
+        }
+    success:
+        set1_ptr++;
+    }
+    
+    set1_ptr = set1;
+    while (*set1_ptr != '\0') {
+        int difference;
+        int i;
+        if (*set1_ptr == '-') {
+            if (set1_ptr == set1 || set1_ptr == set1 + set1_len - 1) {
+                goto success2;
+            }
+            if (*(set1_ptr + 2) == '-') {
+                if (*(set1_ptr + 1) == '-') {
+                    strcpy(set1_ptr, set1_ptr + 2);
+                    goto success2;
+                }
+            }  
+            if (*(set1_ptr - 2) == '-') { 
+                goto success2;
+            }
+
+            difference = *(set1_ptr + 1) - *(set1_ptr - 1);
+
+            if (difference < 0) {
+                return -1;
+            } else if (difference == 0) {
+                strcpy(set1_ptr - 1, set1_ptr + 1);
+            } else {
+                strcpy(set1_ptr + difference - 2, set1_ptr + 1);
+                for (i = 0; i < difference - 1; i++) {
+                    set1_ptr[i] = *set1_ptr - 1;
+                }
+            }                     
+        }
+    success2:
+        set1_ptr++;
+    }  
+
+    c = getchar();
+    while (c != EOF) {
+        size_t index;
+        if (flag == TRUE) {
+            c |= ' ';
+        }
+        if (strrchr(set1, c) != NULL) {
+            index = strrchr(set1, c) - set1;
+            c = set2[index];       
+        }
+        putchar(c);
+        c = getchar();
+    }
+    return 0;    
 }
